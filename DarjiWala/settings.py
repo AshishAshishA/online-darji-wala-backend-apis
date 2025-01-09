@@ -28,6 +28,9 @@ DEBUG = os.environ.get("DEBUG").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
+for host in ALLOWED_HOSTS:
+    print(host)
+
 
 # Application definition
 
