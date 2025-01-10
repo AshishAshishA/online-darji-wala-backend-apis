@@ -139,6 +139,7 @@ def login_view(request):
     try:
         # Fetch the customer
         customer = Customer.objects.get(mobile_num=mobile_num)
+        orders = Order.objects.filter(customer = customer)
     except Customer.DoesNotExist:
         return Response({
             'status': status.HTTP_404_NOT_FOUND,
@@ -151,7 +152,9 @@ def login_view(request):
     if check_password(password, customer.password):
         return Response({
             'status': status.HTTP_201_CREATED,
-            'message': 'logged in successfully'
+            'message': 'logged in successfully',
+            'curr_user':customer,
+            'customer_order':orders
         })
     else:
         return Response({
