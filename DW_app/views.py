@@ -96,8 +96,7 @@ def changePassword(request):
     try:
         customer = Customer.objects.get(mobile_num=mobile_num)
         # Rehash the password using the same method as in the save() method
-        hashed_password = make_password(password)
-        customer.password = hashed_password
+        customer.password = password
         customer.save()
     except Exception as e:
         return Response({
