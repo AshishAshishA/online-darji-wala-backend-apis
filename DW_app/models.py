@@ -14,12 +14,11 @@ class Customer(models.Model):
 
     def save(self, *args, **kwargs):
         if self.password and not self.password.startswith('$'):
-            secret_key = settings.SECRET_KEY
-            self.password = make_password(self.password + secret_key + self.pincode)
+            self.password = make_password(self.password)
         super().save(*args, **kwargs)
     
     def __str__(self):
-        return self.name
+        return self.name + " " + self.password
 
 class Order(models.Model):
     Item_Choices = [

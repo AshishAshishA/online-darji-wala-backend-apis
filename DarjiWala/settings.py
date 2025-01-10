@@ -21,15 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = "fdskjdlfjsdljfksdjfksjdfklskdlfd"
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG").lower() == "true"
+# DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = []
 
-for host in ALLOWED_HOSTS:
-    print(host)
+
+# for host in ALLOWED_HOSTS:
+#     print(host)
 
 
 # Application definition
@@ -136,3 +140,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 API_KEY = os.environ.get("API_KEY")
+# API_KEY = "5368b823-ce4b-11ef-8b17-0200cd936042"

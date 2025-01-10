@@ -25,32 +25,33 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Customer
-        fields = ["mobile_num", "password"]
+# class LoginSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Customer
+#         fields = ["mobile_num", "password"]
 
        
 
-    def validate(self, attrs):
-        mobile_num = attrs.get("mobile_num")
-        password = attrs.get("password")
-        secret_key = settings.SECRET_KEY
+#     def validate(self, attrs):
+    
+#         mobile_num = attrs.get("mobile_num")
+#         password = attrs.get("password")
+#         secret_key = settings.SECRET_KEY
         
+#         print(mobile_num)
+#         try:
+#             customer = Customer.objects.get(mobile_num=mobile_num)
 
-        try:
-            customer = Customer.objects.get(mobile_num=mobile_num)
-
-        except Customer.DoesNotExist:
-            attrs["message"] = "Invalid credentials"
-            return attrs
+#         except Customer.DoesNotExist:
+#             attrs["message"] = "Invalid credentials"
+#             return attrs
         
-        hashed_password = make_password(password+secret_key+customer.pincode)
+#         hashed_password = make_password(password+secret_key+customer.pincode)
 
-        if customer.password == hashed_password:
-            customer_data = CustomerSerializer(customer).data
-            attrs["customer"] = customer_data
-            return attrs
-        else:
-            attrs["message"] = "Invalid credentials"
-            return attrs
+#         if customer.password == hashed_password:
+#             customer_data = CustomerSerializer(customer).data
+#             attrs["customer"] = customer_data
+#             return attrs
+#         else:
+#             attrs["message"] = "Invalid credentials"
+#             return attrs
