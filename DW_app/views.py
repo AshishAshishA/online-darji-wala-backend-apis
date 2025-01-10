@@ -92,8 +92,6 @@ def changePassword(request):
     
     mobile_num = data.get('mobile_num')
     password = data.get('password')
-
-    secret_key = settings.SECRET_KEY
     
     try:
         customer = Customer.objects.get(mobile_num=mobile_num)
@@ -121,14 +119,14 @@ def login_view(request):
     # Ensure both mobile_num and password are provided
     if data.get('mobile_num') is None:
         return Response({
-            'status': 400,
-            'message': 'mobile number is required'
+            'status': status.HTTP_400_BAD_REQUEST,
+            'message': 'Mobile number is required'
         })
     
     if data.get('password') is None:
         return Response({
-            'status': 400,
-            'message': 'password is required'
+            'status': status.HTTP_400_BAD_REQUEST,
+            'message': 'Password is required'
         })
     
     mobile_num = data.get('mobile_num')
@@ -139,25 +137,31 @@ def login_view(request):
     try:
         # Fetch the customer
         customer = Customer.objects.get(mobile_num=mobile_num)
-        orders = Order.objects.filter(customer = customer)
+        orders = Order.objects.filter(customer=customer)
+
+        # To handle the clothes within each order, you can fetch clothes related to each order
+        for order in orders:
+            order.clothes = Clothes.objects.filter(order=order)
     except Customer.DoesNotExist:
         return Response({
             'status': status.HTTP_404_NOT_FOUND,
-            'message': 'mobile number is not registered'
+            'message': 'Mobile number is not registered'
         })
-    
-    # Concatenate the password, secret_key, and pincode (handle pincode being null or empty)
-    
+
     # Compare the password using check_password, which safely compares hashes
     if check_password(password, customer.password):
+        # Serialize the customer and orders data
+        customer_data = CustomerSerializer(customer).data
+        orders_data = OrderSerializer(orders, many=True).data
+        
         return Response({
-            'status': status.HTTP_201_CREATED,
-            'message': 'logged in successfully',
-            'curr_user':customer,
-            'customer_order':orders
+            'status': status.HTTP_200_OK,
+            'message': 'Logged in successfully',
+            'curr_user': customer_data,
+            'customer_order': orders_data
         })
     else:
         return Response({
-            'status': status.HTTP_404_NOT_FOUND,
+            'status': status.HTTP_401_UNAUTHORIZED,
             'message': 'Invalid credentials'
         })
